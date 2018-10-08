@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiscaleModelingApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
-        
+        <Label Content="X,Y" HorizontalAlignment="Left" Margin="565,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="XTextBox" HorizontalAlignment="Left" Height="23" Margin="596,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63"/>
+        <TextBox x:Name="YTextBox" HorizontalAlignment="Left" Height="23" Margin="664,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63"/>
+        <StackPanel x:Name="MainPane1" Height="545" Margin="10,14,0,0" VerticalAlignment="Top" Width="550" HorizontalAlignment="Left" CanVerticallyScroll="True">
+            <Canvas x:Name="MainCanvas" Height="525" Width="525" Margin="0,0,10,0"/>
+        </StackPanel>
+        <Button x:Name="DrawBtn" Content="Draw" HorizontalAlignment="Left" Margin="732,16,0,0" VerticalAlignment="Top" Width="50" Click="DrawPane"/>
+        <Button x:Name="SeedBtn" Content="Seed" HorizontalAlignment="Left" Margin="732,41,0,0" VerticalAlignment="Top" Width="50" Click="SeedBtn_Click"/>
+        <Button x:Name="StartBtn" Content="START" HorizontalAlignment="Left" Margin="732,66,0,0" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="SeedCountTxtBox" HorizontalAlignment="Left" Height="19" Margin="664,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63"/>
     </Grid>
 </Window>
