@@ -7,15 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="742.781" Width="1108.021">
     <Grid Margin="0,0,-8,-21">
-        <Label Content="X,Y" HorizontalAlignment="Left" Margin="786,10,0,0" VerticalAlignment="Top" Width="36"/>
-        <TextBox x:Name="XTextBox" HorizontalAlignment="Left" Height="23" Margin="829,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"/>
-        <TextBox x:Name="YTextBox" HorizontalAlignment="Left" Height="23" Margin="922,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"/>
-        <StackPanel x:Name="MainPane1" Height="650" Margin="10,14,0,0" VerticalAlignment="Top" Width="650" HorizontalAlignment="Left" CanVerticallyScroll="True">
-            <Canvas x:Name="MainCanvas" Height="640" Width="640" Margin="10,0"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="177*"/>
+            <ColumnDefinition Width="931*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="X,Y" HorizontalAlignment="Left" Margin="609,10,0,0" VerticalAlignment="Top" Width="36" Grid.Column="1"/>
+        <TextBox x:Name="XTextBox" HorizontalAlignment="Left" Height="23" Margin="652,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
+        <TextBox x:Name="YTextBox" HorizontalAlignment="Left" Height="23" Margin="745,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
+        <StackPanel x:Name="MainPane1" Height="650" Margin="10,30,0,0" VerticalAlignment="Top" Width="650" HorizontalAlignment="Left" CanVerticallyScroll="True" Grid.ColumnSpan="2">
+            <Canvas x:Name="MainCanvas" Height="640" Width="640" Margin="10,0,0,0"/>
         </StackPanel>
-        <Button x:Name="DrawBtn" Content="Draw" HorizontalAlignment="Left" Margin="1016,16,0,0" VerticalAlignment="Top" Width="68" Click="DrawPane"/>
-        <Button x:Name="SeedBtn" Content="Seed" HorizontalAlignment="Left" Margin="1016,41,0,0" VerticalAlignment="Top" Width="68" Click="SeedBtn_Click"/>
-        <Button x:Name="StartBtn" Content="START" HorizontalAlignment="Left" Margin="1016,66,0,0" VerticalAlignment="Top" Width="68" Click="StartBtn_Click"/>
-        <TextBox x:Name="SeedCountTxtBox" HorizontalAlignment="Left" Height="19" Margin="922,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"/>
+        <Button x:Name="DrawBtn" Content="Draw" HorizontalAlignment="Left" Margin="839,16,0,0" VerticalAlignment="Top" Width="68" Click="DrawPane" Grid.Column="1"/>
+        <Button x:Name="SeedBtn" Content="Seed" HorizontalAlignment="Left" Margin="839,41,0,0" VerticalAlignment="Top" Width="68" Click="SeedBtn_Click" Grid.Column="1"/>
+        <Button x:Name="StartBtn" Content="START" HorizontalAlignment="Left" Margin="839,66,0,0" VerticalAlignment="Top" Width="68" Click="StartBtn_Click" Grid.Column="1"/>
+        <TextBox x:Name="SeedCountTxtBox" HorizontalAlignment="Left" Height="19" Margin="745,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
+        <DockPanel HorizontalAlignment="Left" Height="23" LastChildFill="False" VerticalAlignment="Top" Width="660" Grid.ColumnSpan="2">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Structure">
+                    <MenuItem Header="Import" >
+                        <MenuItem Header="File" Click="LoadFromFileMenuItem"/>
+                        <MenuItem Header="Bitmap" Click="LoadBitmap"/>
+                    </MenuItem>
+                    <MenuItem Header="Export">
+                        <MenuItem Header="File" Click="SaveTextMenuItem"/>
+                        <MenuItem Header="Bitmap" Click="SaveBitmapMenuItem"/>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
     </Grid>
 </Window>

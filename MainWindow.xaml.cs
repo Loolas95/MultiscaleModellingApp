@@ -23,8 +23,8 @@ namespace MultiscaleModelingApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Grain[,] GrainTable { get; set; }
-        public Grain[,] TempGrainTable { get; set; }
+        public static Grain[,] GrainTable { get; set; }
+        public static Grain[,] TempGrainTable { get; set; }
         private bool RunningSimulation=false;
         private DispatcherTimer timer = new DispatcherTimer();
         private int XNumOfCells=0;
@@ -140,6 +140,27 @@ namespace MultiscaleModelingApp
                 
             }
             
+        }
+
+        private void SaveTextMenuItem(object sender, RoutedEventArgs e)
+        {
+            FileManager.Save2TextFile(GrainTable, XNumOfCells, YNumOfCells);
+        }
+
+        private void LoadFromFileMenuItem(object sender, RoutedEventArgs e)
+        {
+            FileManager.ReadFromTextFile(MainCanvas,ref XNumOfCells,ref YNumOfCells);
+            PaintPane();
+        }
+
+        private void SaveBitmapMenuItem(object sender, RoutedEventArgs e)
+        {
+            FileManager.Save2Bitmap(MainCanvas);
+        }
+
+        private void LoadBitmap(object sender, RoutedEventArgs e)
+        {
+            FileManager.LoadFromBitmap(MainCanvas);
         }
     }
 }

@@ -25,6 +25,15 @@ namespace MultiscaleModelingApp.Model
             Rect.Width = width;
             Rect.Height = height;
         }
+        public Grain(int width, int height,Color c)
+        {
+            Color = c;
+            Rect = new Rectangle();
+            Rect.Fill = new SolidColorBrush(c);
+            Rect.Stroke = new SolidColorBrush(c);
+            Rect.Width = width;
+            Rect.Height = height;
+        }
 
         public void Seed(Random Rand)
         {
@@ -41,5 +50,6 @@ namespace MultiscaleModelingApp.Model
             Rect = g.Rect;
 
         }
+
     }
 }
