@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,6 +65,7 @@
     </Compile>
     <Compile Include="FileManager.cs" />
     <Compile Include="Growth.cs" />
+    <Compile Include="Inclusions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -71,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Grain.cs" />
+    <Compile Include="Model\PixelColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

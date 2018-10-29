@@ -33,7 +33,7 @@ namespace MultiscaleModelingApp
         public MainWindow()
         {
             InitializeComponent();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Update;
             //CompositionTarget.Rendering += Update;
 
@@ -43,7 +43,8 @@ namespace MultiscaleModelingApp
         {
             MainCanvas.Children.Clear();
             int width = (int)MainCanvas.Width / XNumOfCells;
-            for (int i = 0; i < MainCanvas.Width; i += width)
+            int height = (int)MainCanvas.Height / YNumOfCells;
+            /*for (int i = 0; i < MainCanvas.Width; i += width)
             {
                 Line line = new Line();
                 line.Stroke = Brushes.DarkBlue;
@@ -57,7 +58,7 @@ namespace MultiscaleModelingApp
                 MainCanvas.Children.Add(line);
             }
 
-            int height = (int)MainCanvas.Height / YNumOfCells;
+           
             for (int i = 0; i < MainCanvas.Height; i += height)
             {
                 Line line = new Line();
@@ -70,7 +71,7 @@ namespace MultiscaleModelingApp
 
                 line.StrokeThickness = 5f/ XNumOfCells;
                 MainCanvas.Children.Add(line);
-            }
+            }*/
             
             for (int i = 0; i < XNumOfCells; i++)
             {
@@ -94,8 +95,8 @@ namespace MultiscaleModelingApp
             {
                 for (int j = 0; j < YNumOfCells; j++)
                 {
-                    GrainTable[i, j] = new Grain((int)MainCanvas.Width/XNumOfCells, (int)MainCanvas.Height/YNumOfCells);
-                    TempGrainTable[i,j] = new Grain((int)MainCanvas.Width / XNumOfCells, (int)MainCanvas.Height / YNumOfCells);
+                    GrainTable[i, j] = new Grain(i,j,(int)MainCanvas.Width/XNumOfCells, (int)MainCanvas.Height/YNumOfCells);
+                    TempGrainTable[i,j] = new Grain(i,j,(int)MainCanvas.Width / XNumOfCells, (int)MainCanvas.Height / YNumOfCells);
                 }
             }
             PaintPane();
@@ -160,7 +161,33 @@ namespace MultiscaleModelingApp
 
         private void LoadBitmap(object sender, RoutedEventArgs e)
         {
-            FileManager.LoadFromBitmap(MainCanvas);
+            FileManager.LoadFromBitmap(MainCanvas, ref XNumOfCells, ref YNumOfCells);
+            PaintPane();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int amount = int.Parse(AmountOfInclusionsTxtBox.Text);
+                int size = int.Parse(SizeOfInclusionsTxtBox.Text);
+                int type = TypeOfInclusionComboBox.SelectedIndex;
+                switch (type)
+                {
+                    case 0:
+                        Inclusions.Circular(amount,size,XNumOfCells, YNumOfCells);
+                        break;
+                    case 1:
+                        Inclusions.Diagonal(amount, size, XNumOfCells, YNumOfCells);
+                        break;
+                    default:
+                        Inclusions.Circular(amount, size, XNumOfCells, YNumOfCells);
+                        break;
+                }
+                
+            }
+            catch (Exception) { }
+            
         }
     }
 }

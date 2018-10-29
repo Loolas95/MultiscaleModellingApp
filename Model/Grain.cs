@@ -16,8 +16,10 @@ namespace MultiscaleModelingApp.Model
         public int X { get; set; }
         public int Y { get; set; }
         public Rectangle Rect{ get; set; }
-        public Grain(int width, int height)
+        public Grain(int x, int y,int width, int height)
         {
+            X = x;
+            Y = y;
             Color = Color.FromRgb(255, 255, 255);
             Rect = new Rectangle();
             Rect.Fill = new SolidColorBrush(Color);
@@ -25,8 +27,10 @@ namespace MultiscaleModelingApp.Model
             Rect.Width = width;
             Rect.Height = height;
         }
-        public Grain(int width, int height,Color c)
+        public Grain(int x, int y, int width, int height,Color c)
         {
+            X = x;
+            Y = y;
             Color = c;
             Rect = new Rectangle();
             Rect.Fill = new SolidColorBrush(c);

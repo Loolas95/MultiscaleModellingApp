@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows;
 
+
 namespace MultiscaleModelingApp
 {
     public class FileManager
@@ -58,12 +59,9 @@ namespace MultiscaleModelingApp
                         int y = int.Parse(parsedline[1]);
                         int state = int.Parse(parsedline[2]);
                         Color color= (Color)ColorConverter.ConvertFromString(parsedline[3]);
-                        MainWindow.GrainTable[x,y]=new Grain((int)mainCanvas.Width / xNumOfCells, (int)mainCanvas.Height / yNumOfCells,color);
-                        MainWindow.GrainTable[x, y].X = x;
-                        MainWindow.GrainTable[x, y].Y = y;
+                        MainWindow.GrainTable[x,y]=new Grain(x,y,(int)mainCanvas.Width / xNumOfCells, (int)mainCanvas.Height / yNumOfCells,color);
                         MainWindow.GrainTable[x, y].State = state;
-                        MainWindow.GrainTable[x, y].Color = color;
-                        MainWindow.TempGrainTable[x, y] = new Grain((int)mainCanvas.Width / xNumOfCells, (int)mainCanvas.Height / yNumOfCells,color);
+                        MainWindow.TempGrainTable[x, y] = new Grain(x,y,(int)mainCanvas.Width / xNumOfCells, (int)mainCanvas.Height / yNumOfCells,color);
                     }
                     Growth.Replace(MainWindow.TempGrainTable, MainWindow.GrainTable, xNumOfCells, yNumOfCells);
                 }
@@ -94,15 +92,48 @@ namespace MultiscaleModelingApp
                 }
             }
         }
-        public static void LoadFromBitmap(Canvas mainCanvas)
+        public static void LoadFromBitmap(Canvas mainCanvas ,ref int xNumOfCells, ref int yNumOfCells)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Png file|*.png";
             if (openFileDialog.ShowDialog() == true)
             {
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri(openFileDialog.FileName));
-                mainCanvas.Background = brush;
+                using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(openFileDialog.FileName))
+                {
+                   
+                    int width = bmp.Width *3/ (int)(bmp.HorizontalResolution+0.5);
+                    int height = bmp.Height*3 / (int)(bmp.VerticalResolution + 0.5);
+                    xNumOfCells = width;
+                    yNumOfCells = height;
+                    Color[,] colortab = new Color[width, height];
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            var clr = bmp.GetPixel(i* (int)(bmp.HorizontalResolution / 3 + 0.5) + (int)(bmp.HorizontalResolution/6), j * (int)(bmp.VerticalResolution / 3 + 0.5) + (int)(bmp.VerticalResolution /6));
+                            colortab[i,j] = Color.FromRgb(clr.R, clr.G, clr.B);
+                        }
+                    }
+                    MainWindow.GrainTable = new Grain[width, height];
+                    MainWindow.TempGrainTable = new Grain[width, height];
+                    
+                    
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            MainWindow.GrainTable[i, j] = new Grain(i, j, (int)mainCanvas.Width / width, (int)mainCanvas.Height / height, colortab[i, j]);
+                            MainWindow.TempGrainTable[i, j] = new Grain(i, j, (int)mainCanvas.Width / width, (int)mainCanvas.Height / height, colortab[i, j]);
+                            if (colortab[i,j]!=Color.FromRgb(255,255,255))
+                            {
+                                MainWindow.GrainTable[i, j].State = 1;
+                            }
+                        }
+                    }
+                    Growth.Replace(MainWindow.TempGrainTable, MainWindow.GrainTable, width, height);
+
+                }
+         
             }
         }
 

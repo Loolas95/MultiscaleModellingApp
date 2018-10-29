@@ -35,5 +35,15 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
+        <Label Content="Amount of inclusions" Grid.Column="1" HorizontalAlignment="Left" Margin="609,87,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="AmountOfInclusionsTxtBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="745,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162"/>
+        <Label Content="Size of inclusions" Grid.Column="1" HorizontalAlignment="Left" Margin="609,118,0,0" VerticalAlignment="Top"/>
+        <Label Content="Type of inclusion" Grid.Column="1" HorizontalAlignment="Left" Margin="609,149,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="SizeOfInclusionsTxtBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="745,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162"/>
+        <ComboBox x:Name="TypeOfInclusionComboBox" Grid.Column="1" HorizontalAlignment="Left" Margin="745,153,0,0" VerticalAlignment="Top" Width="162" SelectedIndex="0">
+            <ComboBoxItem Content="circular"/>
+            <ComboBoxItem Content="diagonal"/>
+        </ComboBox>
+        <Button Content="Add inclusions" Grid.Column="1" HorizontalAlignment="Left" Margin="745,192,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click"/>
     </Grid>
 </Window>
