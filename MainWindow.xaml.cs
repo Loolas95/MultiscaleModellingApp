@@ -1,6 +1,8 @@
 ﻿using MultiscaleModelingApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -30,10 +32,12 @@ namespace MultiscaleModelingApp
         private int XNumOfCells=0;
         private int YNumOfCells = 0;
         private Random rand = new Random();
+        private Bitmap bitmap;
+        public static int Probability = 20;
         public MainWindow()
         {
             InitializeComponent();
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += Update;
             //CompositionTarget.Rendering += Update;
 
@@ -41,7 +45,18 @@ namespace MultiscaleModelingApp
 
         private void PaintPane()
         {
-            MainCanvas.Children.Clear();
+            bitmap = new Bitmap(XNumOfCells, YNumOfCells);
+            for(int i=0;i<XNumOfCells;i++)
+            {
+                for(int j=0;j<YNumOfCells;j++)
+                {
+                    bitmap.SetPixel(i, j, System.Drawing.Color.FromArgb(GrainTable[i, j].Color.A, GrainTable[i, j].Color.R, GrainTable[i, j].Color.G, GrainTable[i, j].Color.B));
+                }
+            }
+            BitmapImage bitmapImage = Convert(bitmap);
+            MainImage.Source = bitmapImage;
+            //MainImage.Source = imagesource;
+            /*inCanvas.Children.Clear();
             int width = (int)MainCanvas.Width / XNumOfCells;
             int height = (int)MainCanvas.Height / YNumOfCells;
             /*for (int i = 0; i < MainCanvas.Width; i += width)
@@ -71,7 +86,7 @@ namespace MultiscaleModelingApp
 
                 line.StrokeThickness = 5f/ XNumOfCells;
                 MainCanvas.Children.Add(line);
-            }*/
+            }
             
             for (int i = 0; i < XNumOfCells; i++)
             {
@@ -82,7 +97,19 @@ namespace MultiscaleModelingApp
                     Canvas.SetTop(GrainTable[i, j].Rect, j*height);
                     
                 }
-            }
+            }*/
+        }
+        public BitmapImage Convert(Bitmap src)
+        {
+            MemoryStream ms = new MemoryStream();
+            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            return image;
         }
 
         private void DrawPane(object sender, RoutedEventArgs e)
@@ -95,8 +122,8 @@ namespace MultiscaleModelingApp
             {
                 for (int j = 0; j < YNumOfCells; j++)
                 {
-                    GrainTable[i, j] = new Grain(i,j,(int)MainCanvas.Width/XNumOfCells, (int)MainCanvas.Height/YNumOfCells);
-                    TempGrainTable[i,j] = new Grain(i,j,(int)MainCanvas.Width / XNumOfCells, (int)MainCanvas.Height / YNumOfCells);
+                    GrainTable[i, j] = new Grain(i,j,(int)MainImage.Width/XNumOfCells, (int)MainImage.Height/YNumOfCells);
+                    TempGrainTable[i,j] = new Grain(i,j,(int)MainImage.Width / XNumOfCells, (int)MainImage.Height / YNumOfCells);
                 }
             }
             PaintPane();
@@ -105,10 +132,23 @@ namespace MultiscaleModelingApp
         private void SeedBtn_Click(object sender, RoutedEventArgs e)
         {
             int numofSeeds = int.Parse(SeedCountTxtBox.Text);
-            for (int i = 0; i < numofSeeds; i++)
+            int x = int.Parse(XTextBox.Text);
+            int y = int.Parse(YTextBox.Text);
+            int tempx,tempy;
+            if (numofSeeds < x * y)
             {
-                GrainTable[rand.Next(int.Parse(XTextBox.Text)), rand.Next(int.Parse(YTextBox.Text))].Seed(rand);
+                for (int i = 0; i < numofSeeds; i++)
+                {
+                    do
+                    {
+                        tempx = rand.Next(x);
+                        tempy = rand.Next(y);
+                    } while (GrainTable[tempx, tempy].State != 0);
+                    GrainTable[tempx, tempy].Seed(rand);
+                }
             }
+         
+            PaintPane();
 
         }
         private void Update(object sender, EventArgs e)
@@ -117,10 +157,21 @@ namespace MultiscaleModelingApp
             {
                 for (int j = 0; j < YNumOfCells; j++)
                 {
-                    Growth.Moore(i, j, GrainTable, TempGrainTable,XNumOfCells,YNumOfCells);
+                    if (!Growth.Moore(i, j,XNumOfCells,YNumOfCells))
+                    {
+                        if(!Growth.NearestMoore(i, j, XNumOfCells, YNumOfCells))
+                        {
+                            if (!Growth.FutherMoore(i, j, XNumOfCells, YNumOfCells))
+                            {
+                                Growth.RuleFour(i, j, XNumOfCells, YNumOfCells);
+                            }
+                        }
+                    }
                 }
             }
+
             Growth.Replace(GrainTable, TempGrainTable, XNumOfCells, YNumOfCells);
+            PaintPane();
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
@@ -150,18 +201,18 @@ namespace MultiscaleModelingApp
 
         private void LoadFromFileMenuItem(object sender, RoutedEventArgs e)
         {
-            FileManager.ReadFromTextFile(MainCanvas,ref XNumOfCells,ref YNumOfCells);
+            FileManager.ReadFromTextFile(MainImage,ref XNumOfCells,ref YNumOfCells);
             PaintPane();
         }
 
         private void SaveBitmapMenuItem(object sender, RoutedEventArgs e)
         {
-            FileManager.Save2Bitmap(MainCanvas);
+            FileManager.Save2Bitmap(bitmap);
         }
 
         private void LoadBitmap(object sender, RoutedEventArgs e)
         {
-            FileManager.LoadFromBitmap(MainCanvas, ref XNumOfCells, ref YNumOfCells);
+            FileManager.LoadFromBitmap(MainImage, ref XNumOfCells, ref YNumOfCells);
             PaintPane();
         }
 
@@ -184,7 +235,8 @@ namespace MultiscaleModelingApp
                         Inclusions.Circular(amount, size, XNumOfCells, YNumOfCells);
                         break;
                 }
-                
+                PaintPane();
+
             }
             catch (Exception) { }
             

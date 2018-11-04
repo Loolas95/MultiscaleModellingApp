@@ -15,7 +15,11 @@
         <TextBox x:Name="XTextBox" HorizontalAlignment="Left" Height="23" Margin="652,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
         <TextBox x:Name="YTextBox" HorizontalAlignment="Left" Height="23" Margin="745,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
         <StackPanel x:Name="MainPane1" Height="650" Margin="10,30,0,0" VerticalAlignment="Top" Width="650" HorizontalAlignment="Left" CanVerticallyScroll="True" Grid.ColumnSpan="2">
-            <Canvas x:Name="MainCanvas" Height="640" Width="640" Margin="10,0,0,0"/>
+            <Image x:Name="MainImage" Height="640" Width="640" Margin="10,0,0,0" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased">
+                <Image.Source >
+                    <BitmapImage UriSource="" />
+                </Image.Source>
+            </Image>
         </StackPanel>
         <Button x:Name="DrawBtn" Content="Draw" HorizontalAlignment="Left" Margin="839,16,0,0" VerticalAlignment="Top" Width="68" Click="DrawPane" Grid.Column="1"/>
         <Button x:Name="SeedBtn" Content="Seed" HorizontalAlignment="Left" Margin="839,41,0,0" VerticalAlignment="Top" Width="68" Click="SeedBtn_Click" Grid.Column="1"/>

@@ -16,6 +16,7 @@ namespace MultiscaleModelingApp.Model
         public int X { get; set; }
         public int Y { get; set; }
         public Rectangle Rect{ get; set; }
+        public bool Inclusion { get; set; } = false;
         public Grain(int x, int y,int width, int height)
         {
             X = x;
@@ -27,6 +28,16 @@ namespace MultiscaleModelingApp.Model
             Rect.Width = width;
             Rect.Height = height;
         }
+
+        public void SetInclusion()
+        {
+            Inclusion = true;
+            State = 1;
+            Color = Color.FromRgb(0, 0, 0);
+            Rect.Fill = new SolidColorBrush(Color);
+            Rect.Stroke = new SolidColorBrush(Color);
+        }
+
         public Grain(int x, int y, int width, int height,Color c)
         {
             X = x;
