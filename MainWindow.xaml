@@ -15,7 +15,7 @@
         <TextBox x:Name="XTextBox" HorizontalAlignment="Left" Height="23" Margin="652,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
         <TextBox x:Name="YTextBox" HorizontalAlignment="Left" Height="23" Margin="745,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
         <StackPanel x:Name="MainPane1" Height="650" Margin="10,30,0,0" VerticalAlignment="Top" Width="650" HorizontalAlignment="Left" CanVerticallyScroll="True" Grid.ColumnSpan="2">
-            <Image x:Name="MainImage" Height="640" Width="640" Margin="10,0,0,0" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased">
+            <Image x:Name="MainImage" Height="640" Width="640" Margin="10,0,0,0" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" MouseUp="MainImage_MouseUp">
                 <Image.Source >
                     <BitmapImage UriSource="" />
                 </Image.Source>
@@ -49,5 +49,10 @@
             <ComboBoxItem Content="diagonal"/>
         </ComboBox>
         <Button Content="Add inclusions" Grid.Column="1" HorizontalAlignment="Left" Margin="745,192,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click"/>
+        <ComboBox x:Name="TypeOfStructureCmbBox" Grid.Column="1" HorizontalAlignment="Left" Margin="745,227,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="TypeOfStructureCmbBox_SelectionChanged">
+            <ComboBoxItem Content="Substructure"/>
+            <ComboBoxItem Content="Dual Phase"/>
+        </ComboBox>
+        <Button x:Name="RegrowBtn" Content="Regrow" Grid.Column="1" HorizontalAlignment="Left" Margin="609,229,0,0" VerticalAlignment="Top" Width="122" Click="RegrowBtn_Click"/>
     </Grid>
 </Window>

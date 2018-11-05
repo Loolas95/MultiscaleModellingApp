@@ -64,6 +64,7 @@ namespace MultiscaleModelingApp
                         {
                             grain = templist.ElementAt(random.Next(templist.Count));
                         } while (inclusions.Contains(grain));
+                        inclusions.Add(grain);
                     }
                 }
             }

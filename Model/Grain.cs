@@ -58,11 +58,28 @@ namespace MultiscaleModelingApp.Model
             Rect.Stroke = new SolidColorBrush(Color);
             State = 1;
         }
+        public void MakeEmpty()
+        {
+            Color = Color.FromRgb(255, 255, 255);
+            Rect.Fill = new SolidColorBrush(Color);
+            Rect.Stroke = new SolidColorBrush(Color);
+            State = 0;
+        }
         public Grain(Grain g)
         {
             Color = g.Color;
             State = g.State;
             Rect = g.Rect;
+
+        }
+        public static List<Grain> NumberOfFeeeCells()
+        {
+            List<Grain> freeGrains = new List<Grain>();
+            foreach(Grain g in MainWindow.GrainTable)
+            {
+                if (g.State == 0) freeGrains.Add(g);
+            }
+            return freeGrains;
 
         }
 

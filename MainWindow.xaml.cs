@@ -33,7 +33,8 @@ namespace MultiscaleModelingApp
         private int YNumOfCells = 0;
         private Random rand = new Random();
         private Bitmap bitmap;
-        public static int Probability = 20;
+        private List<Grain> grains2Regrow;
+        public static int Probability = 10;
         public MainWindow()
         {
             InitializeComponent();
@@ -132,19 +133,17 @@ namespace MultiscaleModelingApp
         private void SeedBtn_Click(object sender, RoutedEventArgs e)
         {
             int numofSeeds = int.Parse(SeedCountTxtBox.Text);
-            int x = int.Parse(XTextBox.Text);
-            int y = int.Parse(YTextBox.Text);
-            int tempx,tempy;
-            if (numofSeeds < x * y)
+            Grain g;
+            List<Grain> freeGrains = Grain.NumberOfFeeeCells();
+            if (numofSeeds < freeGrains.Count)
             {
                 for (int i = 0; i < numofSeeds; i++)
                 {
                     do
                     {
-                        tempx = rand.Next(x);
-                        tempy = rand.Next(y);
-                    } while (GrainTable[tempx, tempy].State != 0);
-                    GrainTable[tempx, tempy].Seed(rand);
+                        g = freeGrains.ElementAt(rand.Next(freeGrains.Count));
+                    } while (g.State != 0 && g.Inclusion==true);
+                    g.Seed(rand);
                 }
             }
          
@@ -240,6 +239,54 @@ namespace MultiscaleModelingApp
             }
             catch (Exception) { }
             
+        }
+
+
+
+        private void MainImage_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                System.Windows.Point p = e.GetPosition(this);
+                double xpos = p.X-20;
+                double ypos = p.Y-30;
+                int x = (int)(xpos / MainImage.Width * XNumOfCells);
+                int y = (int)(ypos / MainImage.Height * YNumOfCells);
+                grains2Regrow.Add(GrainTable[x, y]);
+            }
+            catch (Exception) { }
+            
+        }
+
+        private void RegrowBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int type = TypeOfStructureCmbBox.SelectedIndex;
+
+                switch (type)
+                {
+                    case 0:
+                        Regrowth.Substructure(grains2Regrow);
+                        SeedBtn_Click(null, null);
+                        Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
+                        break;
+                    case 1:
+                        Regrowth.DualPhase(grains2Regrow);
+                        SeedBtn_Click(null, null);
+                        Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception) { }
+            
+        }
+
+        private void TypeOfStructureCmbBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            grains2Regrow = new List<Grain>();
         }
     }
 }
