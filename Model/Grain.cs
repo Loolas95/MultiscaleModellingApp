@@ -72,12 +72,26 @@ namespace MultiscaleModelingApp.Model
             Rect = g.Rect;
 
         }
-        public static List<Grain> NumberOfFeeeCells()
+        public static List<Grain> NumberOfFeeeCells(List<Grain> grainEgdes)
         {
             List<Grain> freeGrains = new List<Grain>();
             foreach(Grain g in MainWindow.GrainTable)
             {
-                if (g.State == 0) freeGrains.Add(g);
+                if (grainEgdes!=null)
+                {
+                    if (g.State == 0 && !grainEgdes.Contains(g))
+                    {
+                        freeGrains.Add(g);
+                    }
+                }
+                else
+                {
+                    if (g.State == 0)
+                    {
+                        freeGrains.Add(g);
+                    }
+                }
+                
             }
             return freeGrains;
 

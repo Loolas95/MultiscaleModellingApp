@@ -54,7 +54,7 @@ namespace MultiscaleModelingApp
             if (AllTableFilled())
             {
                 //inclusion
-                List<Grain> templist = GrainOnEdges(amount, xNumOfCells, yNumOfCells);
+                List<Grain> templist = GrainOnEdges(1,xNumOfCells, yNumOfCells);
                 for (int i = 0; i < amount; i++)
                 {
                     if(amount<templist.Count)
@@ -90,26 +90,39 @@ namespace MultiscaleModelingApp
             }
             return inclusions;
         }
-        private static List<Grain> GrainOnEdges(int amount, int xNumOfCells, int yNumOfCells)
+        public static List<Grain> GrainOnEdges(int width,int xNumOfCells, int yNumOfCells)
         {
             List<Grain> edgesGrains = new List<Grain>();
             foreach (Grain g in MainWindow.GrainTable)
             {
-                if (IsOnTheEdge(g, xNumOfCells, yNumOfCells))
+                if (IsOnTheEdge(g,width, xNumOfCells, yNumOfCells))
                 {
                     edgesGrains.Add(g);
                 }
             }
             return edgesGrains;
         }
-        private static bool IsOnTheEdge(Grain g, int xNumOfCells, int yNumOfCells)
+        public static List<Grain> GrainOnEdges(List<Grain> grains,int width, int xNumOfCells, int yNumOfCells)
+        {
+            List<Grain> edgesGrains = new List<Grain>();
+            if (grains == null) return null;
+            foreach (Grain g in grains)
+            {
+                if (IsOnTheEdge(g, width, xNumOfCells, yNumOfCells))
+                {
+                    edgesGrains.Add(g);
+                }
+            }
+            return edgesGrains;
+        }
+        private static bool IsOnTheEdge(Grain g,int width, int xNumOfCells, int yNumOfCells)
         {
             Color color = g.Color;
-            for (int i = g.X - 1; i < g.X + 1; i++)
+            for (int i = g.X - width; i <= g.X + width; i++)
             {
-                for (int j = g.Y - 1; j < g.Y + 1; j++)
+                for (int j = g.Y - width; j <= g.Y + width; j++)
                 {
-                    if(i>=0 && j>0 && i<xNumOfCells && j<yNumOfCells)
+                    if(i>=0 && j>=0 && i<xNumOfCells && j<yNumOfCells)
                     {
                         if (color != MainWindow.GrainTable[i, j].Color)
                         {

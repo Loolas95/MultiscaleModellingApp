@@ -20,9 +20,10 @@
                     <BitmapImage UriSource="" />
                 </Image.Source>
             </Image>
+            <Label Content="Label"/>
         </StackPanel>
         <Button x:Name="DrawBtn" Content="Draw" HorizontalAlignment="Left" Margin="839,16,0,0" VerticalAlignment="Top" Width="68" Click="DrawPane" Grid.Column="1"/>
-        <Button x:Name="SeedBtn" Content="Seed" HorizontalAlignment="Left" Margin="839,41,0,0" VerticalAlignment="Top" Width="68" Click="SeedBtn_Click" Grid.Column="1"/>
+        <Button x:Name="SeedBtn" Content="Nucleate" HorizontalAlignment="Left" Margin="839,41,0,0" VerticalAlignment="Top" Width="68" Click="SeedBtn_Click" Grid.Column="1"/>
         <Button x:Name="StartBtn" Content="START" HorizontalAlignment="Left" Margin="839,66,0,0" VerticalAlignment="Top" Width="68" Click="StartBtn_Click" Grid.Column="1"/>
         <TextBox x:Name="SeedCountTxtBox" HorizontalAlignment="Left" Height="19" Margin="745,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86" Grid.Column="1"/>
         <DockPanel HorizontalAlignment="Left" Height="23" LastChildFill="False" VerticalAlignment="Top" Width="660" Grid.ColumnSpan="2">
@@ -49,10 +50,21 @@
             <ComboBoxItem Content="diagonal"/>
         </ComboBox>
         <Button Content="Add inclusions" Grid.Column="1" HorizontalAlignment="Left" Margin="745,192,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click"/>
-        <ComboBox x:Name="TypeOfStructureCmbBox" Grid.Column="1" HorizontalAlignment="Left" Margin="745,227,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="TypeOfStructureCmbBox_SelectionChanged">
+        <ComboBox x:Name="TypeOfStructureCmbBox" Grid.Column="1" HorizontalAlignment="Left" Margin="745,266,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="TypeOfStructureCmbBox_SelectionChanged">
             <ComboBoxItem Content="Substructure"/>
             <ComboBoxItem Content="Dual Phase"/>
         </ComboBox>
-        <Button x:Name="RegrowBtn" Content="Regrow" Grid.Column="1" HorizontalAlignment="Left" Margin="609,229,0,0" VerticalAlignment="Top" Width="122" Click="RegrowBtn_Click"/>
+        <Button x:Name="RegrowBtn" Content="Regrow" Grid.Column="1" HorizontalAlignment="Left" Margin="609,268,0,0" VerticalAlignment="Top" Width="122" Click="RegrowBtn_Click"/>
+        <TextBox x:Name="ProbabilityPercTxtBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="857,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
+        <Label Content="Probability %" Grid.Column="1" HorizontalAlignment="Left" Margin="765,225,0,0" VerticalAlignment="Top" Width="87"/>
+        <Label Content="Boundaries" Grid.Column="1" HorizontalAlignment="Left" Margin="526,304,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="TypeOfBoundaryCmbBox" Grid.Column="1" HorizontalAlignment="Left" Margin="609,307,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="TypeOfBoundaryCmbBox_SelectionChanged">
+            <ComboBoxItem Content="All grains"/>
+            <ComboBoxItem Content="Selected grains"/>
+        </ComboBox>
+        <Button x:Name="DrawBoundariesBtn" Content="Draw boundaries" Grid.Column="1" HorizontalAlignment="Left" Margin="685,344,0,0" VerticalAlignment="Top" Width="135" Click="DrawBoundariesBtn_Click"/>
+        <Button x:Name="ClearWithoutBoundariesBtn" Content="Clear" Grid.Column="1" HorizontalAlignment="Left" Margin="832,344,0,0" VerticalAlignment="Top" Width="75" Click="ClearWithoutBoundariesBtn_Click"/>
+        <Label Content="Width of boundary" Grid.Column="1" HorizontalAlignment="Left" Margin="745,304,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="WidthOfBoundaryTxtBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="860,308,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="47"/>
     </Grid>
 </Window>

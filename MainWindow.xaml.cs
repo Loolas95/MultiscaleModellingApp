@@ -34,6 +34,7 @@ namespace MultiscaleModelingApp
         private Random rand = new Random();
         private Bitmap bitmap;
         private List<Grain> grains2Regrow;
+        public static List<Grain> grain2Edge { get; set; }
         public static int Probability = 10;
         public MainWindow()
         {
@@ -56,49 +57,7 @@ namespace MultiscaleModelingApp
             }
             BitmapImage bitmapImage = Convert(bitmap);
             MainImage.Source = bitmapImage;
-            //MainImage.Source = imagesource;
-            /*inCanvas.Children.Clear();
-            int width = (int)MainCanvas.Width / XNumOfCells;
-            int height = (int)MainCanvas.Height / YNumOfCells;
-            /*for (int i = 0; i < MainCanvas.Width; i += width)
-            {
-                Line line = new Line();
-                line.Stroke = Brushes.DarkBlue;
-
-                line.X1 = i;
-                line.X2 = i;
-                line.Y1 = 0;
-                line.Y2 = MainCanvas.Height;
-
-                line.StrokeThickness = 5f/XNumOfCells;
-                MainCanvas.Children.Add(line);
-            }
-
-           
-            for (int i = 0; i < MainCanvas.Height; i += height)
-            {
-                Line line = new Line();
-                line.Stroke = Brushes.DarkBlue;
-
-                line.X1 = 0;
-                line.X2 = MainCanvas.Width;
-                line.Y1 = i;
-                line.Y2 = i;
-
-                line.StrokeThickness = 5f/ XNumOfCells;
-                MainCanvas.Children.Add(line);
-            }
             
-            for (int i = 0; i < XNumOfCells; i++)
-            {
-                for (int j = 0; j < YNumOfCells; j++)
-                {
-                    MainCanvas.Children.Add(GrainTable[i, j].Rect);
-                    Canvas.SetLeft(GrainTable[i, j].Rect, i*width);
-                    Canvas.SetTop(GrainTable[i, j].Rect, j*height);
-                    
-                }
-            }*/
         }
         public BitmapImage Convert(Bitmap src)
         {
@@ -134,7 +93,7 @@ namespace MultiscaleModelingApp
         {
             int numofSeeds = int.Parse(SeedCountTxtBox.Text);
             Grain g;
-            List<Grain> freeGrains = Grain.NumberOfFeeeCells();
+            List<Grain> freeGrains = Grain.NumberOfFeeeCells(grain2Edge);
             if (numofSeeds < freeGrains.Count)
             {
                 for (int i = 0; i < numofSeeds; i++)
@@ -252,7 +211,15 @@ namespace MultiscaleModelingApp
                 double ypos = p.Y-30;
                 int x = (int)(xpos / MainImage.Width * XNumOfCells);
                 int y = (int)(ypos / MainImage.Height * YNumOfCells);
-                grains2Regrow.Add(GrainTable[x, y]);
+                if(TypeOfStructureCmbBox.SelectedIndex!=-1)
+                {
+                    grains2Regrow.Add(GrainTable[x, y]);
+                }
+
+                if(TypeOfBoundaryCmbBox.SelectedIndex==1)
+                {
+                    grain2Edge.Add(GrainTable[x, y]);
+                }
             }
             catch (Exception) { }
             
@@ -263,7 +230,7 @@ namespace MultiscaleModelingApp
             try
             {
                 int type = TypeOfStructureCmbBox.SelectedIndex;
-
+                MainWindow.Probability = int.Parse(ProbabilityPercTxtBox.Text);
                 switch (type)
                 {
                     case 0:
@@ -287,6 +254,40 @@ namespace MultiscaleModelingApp
         private void TypeOfStructureCmbBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             grains2Regrow = new List<Grain>();
+        }
+
+        private void DrawBoundariesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int typeOfBoundary = TypeOfBoundaryCmbBox.SelectedIndex;
+                int widthOfBoundary = int.Parse(WidthOfBoundaryTxtBox.Text);
+                switch (typeOfBoundary)
+                {
+                    case 0:
+                        Boundaries.AllBoundaries(widthOfBoundary, XNumOfCells, YNumOfCells);
+                        PaintPane();
+                        break;
+                    case 1:
+                        Boundaries.SelectedBoundaries(grain2Edge,widthOfBoundary, XNumOfCells, YNumOfCells);
+                        PaintPane();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void TypeOfBoundaryCmbBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            grain2Edge = new List<Grain>();
+        }
+
+        private void ClearWithoutBoundariesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Boundaries.ClearSpace(XNumOfCells, YNumOfCells);
+            PaintPane();
         }
     }
 }
