@@ -79,7 +79,7 @@ namespace MultiscaleModelingApp.Model
             {
                 if (grainEgdes!=null)
                 {
-                    if (g.State == 0 && !grainEgdes.Contains(g))
+                    if (g.State == 0 )
                     {
                         freeGrains.Add(g);
                     }
