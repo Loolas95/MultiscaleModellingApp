@@ -66,5 +66,11 @@
         <Button x:Name="ClearWithoutBoundariesBtn" Content="Clear" Grid.Column="1" HorizontalAlignment="Left" Margin="832,344,0,0" VerticalAlignment="Top" Width="75" Click="ClearWithoutBoundariesBtn_Click"/>
         <Label Content="Width of boundary" Grid.Column="1" HorizontalAlignment="Left" Margin="745,304,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="WidthOfBoundaryTxtBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="860,308,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="47"/>
+        <TextBox x:Name="NumberOfStatesTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="633,388,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
+        <Label x:Name="NumberOfStatesLabel" Content="Number of states" Grid.Column="1" HorizontalAlignment="Left" Margin="526,385,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="NucleateMCBtn" Content="NucleateMC" Grid.Column="1" HorizontalAlignment="Left" Margin="707,388,0,0" VerticalAlignment="Top" Width="87" Height="23" Click="NucleateMCBtn_Click"/>
+        <Button x:Name="StartMCBtn" Content="StartMC" Grid.Column="1" HorizontalAlignment="Left" Margin="814,388,0,0" VerticalAlignment="Top" Width="73" Height="23" Click="StartMCBtn_Click"/>
+        <TextBox x:Name="NumberOfIterationsTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="633,419,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Text="10"/>
+        <Label x:Name="NumberOfIterationsLabel" Content="Number of iter" Grid.Column="1" HorizontalAlignment="Left" Margin="526,416,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

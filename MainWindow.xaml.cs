@@ -27,15 +27,20 @@ namespace MultiscaleModelingApp
     {
         public static Grain[,] GrainTable { get; set; }
         public static Grain[,] TempGrainTable { get; set; }
-        private bool RunningSimulation=false;
+        private bool RunningSimulation = false;
         private DispatcherTimer timer = new DispatcherTimer();
-        private int XNumOfCells=0;
-        private int YNumOfCells = 0;
+        public static int XNumOfCells{get;set;} = 0 ;
+        public static int YNumOfCells { get; set; } = 0;
         private Random rand = new Random();
         private Bitmap bitmap;
         private List<Grain> grains2Regrow;
         public static List<Grain> grain2Edge { get; set; }
         public static int Probability = 10;
+        public static List<Grain> grainMCList;
+        public static float GrainEnergy = 1.0f;
+        private static bool monteCarlo = false;
+        private static int NumberOfMCIterations=0;
+        private static int NumberOfIterationFromGUI = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -86,6 +91,7 @@ namespace MultiscaleModelingApp
                     TempGrainTable[i,j] = new Grain(i,j,(int)MainImage.Width / XNumOfCells, (int)MainImage.Height / YNumOfCells);
                 }
             }
+            grainMCList = Grain.NumberOfFeeeCells(null);
             PaintPane();
         }
 
@@ -105,35 +111,57 @@ namespace MultiscaleModelingApp
                     g.Seed(rand);
                 }
             }
+            
          
             PaintPane();
 
         }
         private void Update(object sender, EventArgs e)
         {
-            for (int i = 0; i < XNumOfCells; i++)
+            if (!monteCarlo)
             {
-                for (int j = 0; j < YNumOfCells; j++)
+                for (int i = 0; i < XNumOfCells; i++)
                 {
-                    if (!Growth.Moore(i, j,XNumOfCells,YNumOfCells))
+                    for (int j = 0; j < YNumOfCells; j++)
                     {
-                        if(!Growth.NearestMoore(i, j, XNumOfCells, YNumOfCells))
+                        if (!Growth.Moore(i, j, XNumOfCells, YNumOfCells))
                         {
-                            if (!Growth.FutherMoore(i, j, XNumOfCells, YNumOfCells))
+                            if (!Growth.NearestMoore(i, j, XNumOfCells, YNumOfCells))
                             {
-                                Growth.RuleFour(i, j, XNumOfCells, YNumOfCells);
+                                if (!Growth.FutherMoore(i, j, XNumOfCells, YNumOfCells))
+                                {
+                                    Growth.RuleFour(i, j, XNumOfCells, YNumOfCells);
+                                }
                             }
                         }
                     }
                 }
+                Growth.Replace(GrainTable, TempGrainTable, XNumOfCells, YNumOfCells);
+            }
+            else
+            {
+                while (grainMCList.Any())
+                {
+                    MonteCarlo.ChangeGrains();
+                }
+                grainMCList=MonteCarlo.GetNewMCList();
+                NumberOfMCIterations++;
+                NumberOfIterationsTextBox.Text = (NumberOfIterationFromGUI- NumberOfMCIterations).ToString();
+            }
+            if (NumberOfMCIterations >= NumberOfIterationFromGUI){
+                monteCarlo = false;
+                StartMCBtn.Content = "START MC";
+                timer.Stop();
+                NumberOfMCIterations = 0;
             }
 
-            Growth.Replace(GrainTable, TempGrainTable, XNumOfCells, YNumOfCells);
+            
             PaintPane();
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
+            
             if (RunningSimulation)
             {
                 
@@ -159,7 +187,7 @@ namespace MultiscaleModelingApp
 
         private void LoadFromFileMenuItem(object sender, RoutedEventArgs e)
         {
-            FileManager.ReadFromTextFile(MainImage,ref XNumOfCells,ref YNumOfCells);
+            FileManager.ReadFromTextFile(MainImage);
             PaintPane();
         }
 
@@ -170,7 +198,7 @@ namespace MultiscaleModelingApp
 
         private void LoadBitmap(object sender, RoutedEventArgs e)
         {
-            FileManager.LoadFromBitmap(MainImage, ref XNumOfCells, ref YNumOfCells);
+            FileManager.LoadFromBitmap(MainImage);
             PaintPane();
         }
 
@@ -230,18 +258,20 @@ namespace MultiscaleModelingApp
             try
             {
                 int type = TypeOfStructureCmbBox.SelectedIndex;
-                MainWindow.Probability = int.Parse(ProbabilityPercTxtBox.Text);
+                //MainWindow.Probability = int.Parse(ProbabilityPercTxtBox.Text);
                 switch (type)
                 {
                     case 0:
                         Regrowth.Substructure(grains2Regrow);
-                        SeedBtn_Click(null, null);
+                        //SeedBtn_Click(null, null);
                         Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
+                        PaintPane();
                         break;
                     case 1:
                         Regrowth.DualPhase(grains2Regrow);
-                        SeedBtn_Click(null, null);
+                        //SeedBtn_Click(null, null);
                         Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
+                        PaintPane();
                         break;
                     default:
                         break;
@@ -288,6 +318,38 @@ namespace MultiscaleModelingApp
         {
             Boundaries.ClearSpace(XNumOfCells, YNumOfCells);
             PaintPane();
+        }
+
+        private void NucleateMCBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int Q = int.Parse(NumberOfStatesTextBox.Text);
+            MonteCarlo.GenerateListOfColors(Q);
+            grainMCList = Grain.NumberOfFeeeCells(null);
+            MonteCarlo.GenerateGrains();
+            PaintPane();
+        }
+
+        private void StartMCBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (monteCarlo)
+            {
+                monteCarlo = false;
+                StartMCBtn.Content = "START MC";
+                timer.Stop();
+            }
+            else
+            {
+                NumberOfIterationFromGUI = int.Parse(NumberOfIterationsTextBox.Text);
+                if (NumberOfIterationFromGUI > 0)
+                {
+                    monteCarlo = true;
+                    StartMCBtn.Content = "STOP MC";
+                    timer.Start();
+                }
+
+                
+
+            }
         }
     }
 }

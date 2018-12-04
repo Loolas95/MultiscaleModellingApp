@@ -37,7 +37,7 @@ namespace MultiscaleModelingApp
                 }
             }
         }
-        public static Grain[,] ReadFromTextFile(Image mainImage, ref int xNumOfCells, ref int yNumOfCells)
+        public static Grain[,] ReadFromTextFile(Image mainImage)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Txt file|*.txt";
@@ -47,10 +47,10 @@ namespace MultiscaleModelingApp
                 {
                     // Read the stream to a string, and write the string to the console.
                     var tab = sr.ReadLine().Split();
-                    xNumOfCells = int.Parse(tab[0]);
-                    yNumOfCells = int.Parse(tab[1]);
-                    MainWindow.GrainTable = new Grain[xNumOfCells, yNumOfCells];
-                    MainWindow.TempGrainTable = new Grain[xNumOfCells, yNumOfCells];
+                    MainWindow.XNumOfCells = int.Parse(tab[0]);
+                    MainWindow.YNumOfCells = int.Parse(tab[1]);
+                    MainWindow.GrainTable = new Grain[MainWindow.XNumOfCells, MainWindow.YNumOfCells];
+                    MainWindow.TempGrainTable = new Grain[MainWindow.XNumOfCells, MainWindow.YNumOfCells];
                     String line;
                     while ((line = sr.ReadLine()) != null)
                     {
@@ -59,15 +59,15 @@ namespace MultiscaleModelingApp
                         int y = int.Parse(parsedline[1]);
                         int state = int.Parse(parsedline[2]);
                         Color color= (Color)ColorConverter.ConvertFromString(parsedline[3]);
-                        MainWindow.GrainTable[x,y]=new Grain(x,y,(int)mainImage.Width / xNumOfCells, (int)mainImage.Height / yNumOfCells,color);
+                        MainWindow.GrainTable[x,y]=new Grain(x,y,(int)mainImage.Width / MainWindow.XNumOfCells, (int)mainImage.Height / MainWindow.YNumOfCells, color);
                         MainWindow.GrainTable[x, y].State = state;
-                        MainWindow.TempGrainTable[x, y] = new Grain(x,y,(int)mainImage.Width / xNumOfCells, (int)mainImage.Height / yNumOfCells,color);
+                        MainWindow.TempGrainTable[x, y] = new Grain(x,y,(int)mainImage.Width / MainWindow.XNumOfCells, (int)mainImage.Height / MainWindow.YNumOfCells, color);
                         if (color == Color.FromRgb(0, 0, 0))
                         {
                             MainWindow.GrainTable[x, y].Inclusion = true;
                         }
                     }
-                    Growth.Replace(MainWindow.TempGrainTable, MainWindow.GrainTable, xNumOfCells, yNumOfCells);
+                    Growth.Replace(MainWindow.TempGrainTable, MainWindow.GrainTable, MainWindow.XNumOfCells, MainWindow.YNumOfCells);
                 }
             }
             return null;
@@ -97,7 +97,7 @@ namespace MultiscaleModelingApp
                 bmp.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
             }
         }
-        public static void LoadFromBitmap(Image mainImage, ref int xNumOfCells, ref int yNumOfCells)
+        public static void LoadFromBitmap(Image mainImage)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Png file|*.png";
@@ -108,8 +108,8 @@ namespace MultiscaleModelingApp
 
                     int width = bmp.Width;
                     int height = bmp.Height;
-                    xNumOfCells = width;
-                    yNumOfCells = height;
+                    MainWindow.XNumOfCells = width;
+                    MainWindow.YNumOfCells = height;
                     Color[,] colortab = new Color[width, height];
                     for (int i = 0; i < width; i++)
                     {

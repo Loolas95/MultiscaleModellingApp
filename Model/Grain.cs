@@ -58,6 +58,14 @@ namespace MultiscaleModelingApp.Model
             Rect.Stroke = new SolidColorBrush(Color);
             State = 1;
         }
+        public void Seed(Color color)
+        {
+
+            Color = color;
+            Rect.Fill = new SolidColorBrush(color);
+            Rect.Stroke = new SolidColorBrush(color);
+            State = 1;
+        }
         public void MakeEmpty()
         {
             Color = Color.FromRgb(255, 255, 255);

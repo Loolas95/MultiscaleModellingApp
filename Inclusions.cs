@@ -115,7 +115,7 @@ namespace MultiscaleModelingApp
             }
             return edgesGrains;
         }
-        private static bool IsOnTheEdge(Grain g,int width, int xNumOfCells, int yNumOfCells)
+        public static bool IsOnTheEdge(Grain g,int width, int xNumOfCells, int yNumOfCells)
         {
             Color color = g.Color;
             for (int i = g.X - width; i <= g.X + width; i++)
