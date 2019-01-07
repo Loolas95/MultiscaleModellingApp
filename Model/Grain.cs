@@ -11,12 +11,17 @@ namespace MultiscaleModelingApp.Model
 {
     public class Grain
     {
+
         public Color Color { get; set; }
         public int State { get; set; } = 0;
+        public int H { get; set; } = 0;
         public int X { get; set; }
         public int Y { get; set; }
         public Rectangle Rect{ get; set; }
         public bool Inclusion { get; set; } = false;
+        public string id { get; set; }
+        public Color EnergyColor { get; set; }
+        public bool Recrystalized = false;
         public Grain(int x, int y,int width, int height)
         {
             X = x;
@@ -27,6 +32,7 @@ namespace MultiscaleModelingApp.Model
             Rect.Stroke = new SolidColorBrush(Color);
             Rect.Width = width;
             Rect.Height = height;
+            id = X.ToString() + "." + Y.ToString();
         }
 
         public void SetInclusion()
@@ -57,6 +63,7 @@ namespace MultiscaleModelingApp.Model
             Rect.Fill = new SolidColorBrush(Color);
             Rect.Stroke = new SolidColorBrush(Color);
             State = 1;
+
         }
         public void Seed(Color color)
         {
@@ -72,12 +79,18 @@ namespace MultiscaleModelingApp.Model
             Rect.Fill = new SolidColorBrush(Color);
             Rect.Stroke = new SolidColorBrush(Color);
             State = 0;
+
         }
         public Grain(Grain g)
         {
+            X = g.X;
+            Y = g.Y;
             Color = g.Color;
             State = g.State;
             Rect = g.Rect;
+            H = g.H;
+            Inclusion = g.Inclusion;
+            
 
         }
         public static List<Grain> NumberOfFeeeCells(List<Grain> grainEgdes)
@@ -101,6 +114,7 @@ namespace MultiscaleModelingApp.Model
                 }
                 
             }
+            freeGrains = MonteCarlo.ShuffleList(freeGrains);
             return freeGrains;
 
         }

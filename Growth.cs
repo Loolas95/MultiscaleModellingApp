@@ -177,6 +177,7 @@ namespace MultiscaleModelingApp
             MainWindow.TempGrainTable[i, j].Color = g.Color;
             MainWindow.TempGrainTable[i, j].State = g.State;
             MainWindow.TempGrainTable[i,j].Inclusion = g.Inclusion;
+            MainWindow.TempGrainTable[i, j].id = g.id;
         }
 
         public  static void Replace(Grain[,] grainTable, Grain[,] tempGrainTable, int xNumOfCells, int yNumOfCells)
@@ -189,6 +190,7 @@ namespace MultiscaleModelingApp
                     grainTable[i, j].Rect.Stroke = tempGrainTable[i, j].Rect.Stroke;
                     grainTable[i, j].Color = tempGrainTable[i, j].Color;
                     grainTable[i, j].State = tempGrainTable[i, j].State;
+                    grainTable[i, j].id = tempGrainTable[i, j].id;
                 }
             }
         }

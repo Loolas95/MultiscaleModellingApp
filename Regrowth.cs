@@ -32,19 +32,18 @@ namespace MultiscaleModelingApp
         }
         public static void DualPhase(List<Grain> grains)
         {
-            List<Color> ids = new List<Color>();
+            List<Grain> ChangedGrains = new List<Grain>();
             foreach (Grain g in grains)
             {
-                if (!ids.Contains(g.Color))
-                {
-                    ids.Add(g.Color);
-                }
+                ChangedGrains.Add(g);
+                ChangedGrains.AddRange(ListOfNeighbours(g));
             }
+            ChangedGrains = ChangedGrains.Distinct().ToList();
             Random rand = new Random();
             Color c = Color.FromRgb(Convert.ToByte(rand.Next(255)), Convert.ToByte(rand.Next(255)), Convert.ToByte(rand.Next(255)));
             foreach (Grain g in MainWindow.GrainTable)
             {
-                if (!g.Inclusion && !ids.Contains(g.Color))
+                if (!g.Inclusion && !ChangedGrains.Contains(g))
                 {
                     g.MakeEmpty();
                 }
@@ -58,5 +57,55 @@ namespace MultiscaleModelingApp
 
             }
         }
+        public static List<Grain> ListOfNeighbours(Grain g)
+        {
+            List<Grain> listneigbours = new List<Grain>();
+            List<Grain> neigbours = new List<Grain>();
+            int i = g.X;
+            while(i < MainWindow.XNumOfCells&&MainWindow.GrainTable[i, g.Y].Color == g.Color )
+            {
+                neigbours.Add(MainWindow.GrainTable[i, g.Y]);
+                i++;
+            }
+            i = g.X - 1;
+            while (i>=0 && MainWindow.GrainTable[i, g.Y].Color == g.Color )
+            {
+                neigbours.Add(MainWindow.GrainTable[i, g.Y]);
+                i--;
+            }
+            listneigbours.AddRange(neigbours);
+            List<Grain> neigbourstemp = new List<Grain>();
+            do
+            {
+                foreach (Grain grain in neigbours)
+                {
+                    for(int j = grain.Y - 1; j < grain.Y + 2; j += 2)
+                    {
+                        if (j >= 0 && j < MainWindow.YNumOfCells && MainWindow.GrainTable[grain.X, j].Color == grain.Color)
+                        {
+                            neigbourstemp.Add(MainWindow.GrainTable[grain.X, j]);
+                        }
+                    }
+                    for (int j = grain.X - 1; j < grain.X + 2; j += 2)
+                    {
+                        if (j >= 0 && j < MainWindow.XNumOfCells && MainWindow.GrainTable[j,grain.Y].Color == grain.Color)
+                        {
+                            neigbourstemp.Add(MainWindow.GrainTable[j,grain.Y]);
+                        }
+                    }
+
+
+                }
+                neigbourstemp.RemoveAll(x => listneigbours.Contains(x));
+                neigbours.Clear();
+                neigbours.AddRange(neigbourstemp);
+                listneigbours.AddRange(neigbours);
+                neigbourstemp.Clear();
+            } while (neigbours.Any());
+            
+
+            return listneigbours;
+        }
+
     }
 }

@@ -1,0 +1,15 @@
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Release\MultiscaleModelingApp.exe.config
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Release\MultiscaleModelingApp.exe
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Release\MultiscaleModelingApp.pdb
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MainWindow.g.cs
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\App.g.cs
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp_MarkupCompile.cache
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp_MarkupCompile.lref
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MainWindow.baml
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.g.resources
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.Properties.Resources.resources
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.csproj.GenerateResource.Cache
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.csproj.CoreCompileInputs.cache
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.exe
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.pdb
+C:\Users\Karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Release\MultiscaleModelingApp.csprojResolveAssemblyReference.cache

@@ -1,7 +1,6 @@
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Debug\MultiscaleModelingApp.exe.config
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Debug\MultiscaleModelingApp.exe
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\bin\Debug\MultiscaleModelingApp.pdb
-c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Debug\MultiscaleModelingApp.csprojResolveAssemblyReference.cache
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Debug\MainWindow.g.cs
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Debug\App.g.cs
 c:\users\karol\source\repos\MultiscaleModelingApp\MultiscaleModelingApp\obj\Debug\MultiscaleModelingApp_MarkupCompile.cache

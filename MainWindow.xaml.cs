@@ -36,11 +36,12 @@ namespace MultiscaleModelingApp
         private List<Grain> grains2Regrow;
         public static List<Grain> grain2Edge { get; set; }
         public static int Probability = 10;
-        public static List<Grain> grainMCList;
+        public static List<Grain> grainMCList,RSXMCList;
         public static float GrainEnergy = 1.0f;
-        private static bool monteCarlo = false;
+        private static bool monteCarlo = false, SRXMC = false;
         private static int NumberOfMCIterations=0;
         private static int NumberOfIterationFromGUI = 0;
+        public static bool showEnergy = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -57,7 +58,10 @@ namespace MultiscaleModelingApp
             {
                 for(int j=0;j<YNumOfCells;j++)
                 {
-                    bitmap.SetPixel(i, j, System.Drawing.Color.FromArgb(GrainTable[i, j].Color.A, GrainTable[i, j].Color.R, GrainTable[i, j].Color.G, GrainTable[i, j].Color.B));
+                    if(showEnergy)
+                        bitmap.SetPixel(i, j, System.Drawing.Color.FromArgb(GrainTable[i, j].EnergyColor.A, GrainTable[i, j].EnergyColor.R, GrainTable[i, j].EnergyColor.G, GrainTable[i, j].EnergyColor.B));
+                    else
+                        bitmap.SetPixel(i, j, System.Drawing.Color.FromArgb(GrainTable[i, j].Color.A, GrainTable[i, j].Color.R, GrainTable[i, j].Color.G, GrainTable[i, j].Color.B));
                 }
             }
             BitmapImage bitmapImage = Convert(bitmap);
@@ -118,7 +122,7 @@ namespace MultiscaleModelingApp
         }
         private void Update(object sender, EventArgs e)
         {
-            if (!monteCarlo)
+            if (!monteCarlo && !SRXMC)
             {
                 for (int i = 0; i < XNumOfCells; i++)
                 {
@@ -138,21 +142,41 @@ namespace MultiscaleModelingApp
                 }
                 Growth.Replace(GrainTable, TempGrainTable, XNumOfCells, YNumOfCells);
             }
-            else
+            else if(monteCarlo)
             {
                 while (grainMCList.Any())
                 {
                     MonteCarlo.ChangeGrains();
                 }
-                grainMCList=MonteCarlo.GetNewMCList();
+                grainMCList = MonteCarlo.GetNewMCList();
                 NumberOfMCIterations++;
-                NumberOfIterationsTextBox.Text = (NumberOfIterationFromGUI- NumberOfMCIterations).ToString();
+                NumberOfIterationsTextBox.Text = (NumberOfIterationFromGUI - NumberOfMCIterations).ToString();
+
+                if (NumberOfMCIterations >= NumberOfIterationFromGUI)
+                {
+                    monteCarlo = false;
+                    StartMCBtn.Content = "START MC";
+                    timer.Stop();
+                    NumberOfMCIterations = 0;
+                }
             }
-            if (NumberOfMCIterations >= NumberOfIterationFromGUI){
-                monteCarlo = false;
-                StartMCBtn.Content = "START MC";
-                timer.Stop();
-                NumberOfMCIterations = 0;
+            else
+            {
+                while (RSXMCList.Any())
+                {
+                    MonteCarlo.ChangeRSXGrains();
+                }
+                RSXMCList = RSXMC.NewRSXMCList();
+                NumberOfMCIterations++;
+                NumberOfIterationsTextBox.Text = (NumberOfIterationFromGUI - NumberOfMCIterations).ToString();
+
+                if (NumberOfMCIterations >= NumberOfIterationFromGUI)
+                {
+                    monteCarlo = false;
+                    StartMCBtn.Content = "START MC";
+                    timer.Stop();
+                    NumberOfMCIterations = 0;
+                }
             }
 
             
@@ -266,11 +290,13 @@ namespace MultiscaleModelingApp
                         //SeedBtn_Click(null, null);
                         Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
                         PaintPane();
+                        grains2Regrow.Clear();
                         break;
                     case 1:
                         Regrowth.DualPhase(grains2Regrow);
                         //SeedBtn_Click(null, null);
                         Growth.Replace(TempGrainTable, GrainTable, XNumOfCells, YNumOfCells);
+                        grains2Regrow.Clear();
                         PaintPane();
                         break;
                     default:
@@ -350,6 +376,67 @@ namespace MultiscaleModelingApp
                 
 
             }
+        }
+
+        private void ShowEnergyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!showEnergy)
+                {
+                    showEnergy = true;
+                    PaintPane();
+                    ShowEnergyBtn.Content = "Hide Energy";
+                }
+                else
+                {
+                    showEnergy = false;
+                    ShowEnergyBtn.Content = "Show Energy";
+                    PaintPane();
+                }
+                
+            }
+            catch (Exception) { }
+            
+        }
+
+        private void DIstributeEnergyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int EnergyDistribution = EnergyDistribuitonCmbBox.SelectedIndex;
+            int EnergyOnEgdes = int.Parse(EnergyOnEgdesTxtBox.Text);
+            int EnergyInside = int.Parse(EnergyInsideTxtBox.Text);
+            Energy.DistributeEnergy(EnergyDistribution, EnergyOnEgdes, EnergyInside);
+        }
+
+        private void StartSRXMCBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (SRXMC)
+                {
+                    SRXMC = false;
+                    StartSRXMCBtn.Content = "Start RSXMC";
+                    timer.Stop();
+                }
+                else
+                {
+                    NumberOfIterationFromGUI = int.Parse(NUmberOfIterationsSRXMCTxtBox.Text);
+                    if (NumberOfIterationFromGUI > 0)
+                    {
+                        SRXMC = true;
+                        StartSRXMCBtn.Content = "Stop RSXMC";
+                        int numberofnucleons = int.Parse(NUmberOfNucleonsTxtBox.Text);
+                        int location = LocationCmbBox.SelectedIndex;
+                        int nucleationtype = NucleationTypeCmbBox.SelectedIndex;
+                        RSXMC.Nucleate(numberofnucleons, location);
+                        RSXMCList = RSXMC.NewRSXMCList();
+                        PaintPane();
+                        timer.Start();
+                    }
+                }
+            }
+            catch (Exception) { }
+         
         }
     }
 }
