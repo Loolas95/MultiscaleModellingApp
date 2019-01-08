@@ -74,10 +74,6 @@ namespace MultiscaleModelingApp
                         g.EnergyColor = Color.FromRgb(255, 255, 255);
                         g.H = 0;
                         g.Recrystalized = true;
-                        if (MainWindow.RSXMCList.Contains(g))
-                        {
-                            MainWindow.RSXMCList.Remove(g);
-                        }
                     }
                 }
                 else

@@ -32,18 +32,26 @@ namespace MultiscaleModelingApp
         }
         public static void DualPhase(List<Grain> grains)
         {
-            List<Grain> ChangedGrains = new List<Grain>();
+            /*List<Grain> ChangedGrains = new List<Grain>();
             foreach (Grain g in grains)
             {
                 ChangedGrains.Add(g);
                 ChangedGrains.AddRange(ListOfNeighbours(g));
             }
-            ChangedGrains = ChangedGrains.Distinct().ToList();
+            ChangedGrains = ChangedGrains.Distinct().ToList();*/
             Random rand = new Random();
             Color c = Color.FromRgb(Convert.ToByte(rand.Next(255)), Convert.ToByte(rand.Next(255)), Convert.ToByte(rand.Next(255)));
+            List<Color> ids = new List<Color>();
+            foreach(Grain g in grains)
+            {
+                if(!ids.Contains(g.Color))
+                {
+                    ids.Add(g.Color);
+                }
+            }
             foreach (Grain g in MainWindow.GrainTable)
             {
-                if (!g.Inclusion && !ChangedGrains.Contains(g))
+                if (!g.Inclusion && !ids.Contains(g.Color))
                 {
                     g.MakeEmpty();
                 }
